@@ -446,4 +446,13 @@ public class JSONUtil {
         return deleteResult;
     }
 
+    /**
+     * 通过车辆识别代码生成
+     * @param carVim
+     * @return
+     */
+    public static String createQueryCarStateJSON(String carVim) {
+        return createDeleteCarJSON(carVim);
+    }
+
 }

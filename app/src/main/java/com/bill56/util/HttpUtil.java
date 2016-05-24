@@ -47,6 +47,8 @@ public class HttpUtil {
 
     public static final int REQUEST_DELETE_CAR = 203;
 
+    public static final int REQUEST_QUERY_CAR_STATE = 300;
+
 
     /**
      * 发送请求给指定网址并获得数据（访问内部）
@@ -187,6 +189,8 @@ public class HttpUtil {
                 return "queryUserCar";
             case REQUEST_DELETE_CAR:
                 return "deleteUserCar";
+            case REQUEST_QUERY_CAR_STATE:
+                return "queryCarState";
             default:
                 return "error";
         }
