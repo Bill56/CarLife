@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/textView_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="N."
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_GSname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView_num"
+            android:singleLine="true"
+            android:text="Gas station's name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:gravity="end"
+            android:text="distance" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView_brandname"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Brandname" />
+
+        <TextView
+            android:id="@+id/textView_90"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/gas_button"
+            android:gravity="center"
+            android:text="90#"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView_price90"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-2dp"
+            android:background="@drawable/price_button"
+            android:gravity="center"
+            android:text="price"
+            android:textColor="#0000FF" />
+
+        <TextView
+            android:id="@+id/textView_93"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/gas_button"
+            android:gravity="center"
+            android:text="93#"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView_price93"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-2dp"
+            android:background="@drawable/price_button"
+            android:gravity="center"
+            android:text="price"
+            android:textColor="#0000FF" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp">
+
+        <TextView
+            android:id="@+id/textView_97"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="100dp"
+            android:background="@drawable/gas_button"
+            android:gravity="center"
+            android:text="97#"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView_price97"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="-2dp"
+            android:layout_toEndOf="@+id/textView_97"
+            android:background="@drawable/price_button"
+            android:gravity="center"
+            android:text="price"
+            android:textColor="#0000FF" />
+
+        <TextView
+            android:id="@+id/textView_0"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/textView_price97"
+            android:background="@drawable/gas_button"
+            android:gravity="center"
+            android:text="0#"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/textView_price0"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="-2dp"
+            android:layout_toEndOf="@+id/textView_0"
+            android:background="@drawable/price_button"
+            android:gravity="center"
+            android:text="price"
+            android:textColor="#0000FF" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="5dp"
+        android:text="address" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.bill56.customui.ImageLayout
+            android:id="@+id/layout_roate"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+        </com.bill56.customui.ImageLayout>
+
+        <com.bill56.customui.ImageLayout
+            android:id="@+id/layout_ordRef"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+        </com.bill56.customui.ImageLayout>
+    </LinearLayout>
+
+</LinearLayout>

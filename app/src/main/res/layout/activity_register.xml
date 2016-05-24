@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.asus.phonetest.MainActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginTop="100dp"
+            android:text="@string/register_phonenum"
+            android:textSize="16sp"
+            android:id="@+id/textView" />
+
+        <EditText
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/editText_phone"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="wrap_content"
+            android:inputType="phone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="right"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="16sp"
+            android:text="@string/register_pwd"
+            android:id="@+id/textView2" />
+
+        <EditText
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/editText_pwd"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="wrap_content"
+            android:inputType="text"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/editText_num"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/register_sendYZM" />
+
+        <Button
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/button_getNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_getYZM" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_height="50dp"
+        android:text="@string/register_load"
+        android:background="@drawable/loadin_button"
+        android:id="@+id/button"
+        android:onClick="register"/>
+
+</LinearLayout>

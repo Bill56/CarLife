@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">智车生活</string>
+    <string name="gpsfollow">追随</string>
+    <string name="gpslocate">定位</string>
+    <string name="gpsrotate">旋转</string>
+    <string name="open">oepn</string>
+    <string name="close">close</string>
+
+    <string name="drawer_order_refu">预约加油</string>
+    <string name="drawer_history_record">历史记录</string>
+    <string name="drawer_illegal_query">违章查询</string>
+    <string name="drawer_car_info">车辆信息</string>
+    <string name="drawer_notification">通知</string>
+    <string name="drawer_help">帮助</string>
+    <string name="drawer_setting">设置</string>
+    <string name="drawer_about">关于</string>
+
+    <string name="map_search_from">从</string>
+    <string name="map_search_to">到</string>
+    <string name="map_search_from_deafaut">我的位置</string>
+    <string name="map_search_to_hint">输入终点</string>
+    <string name="main_option_seach">搜索目的地</string>
+    <string name="no_result">对不起，没有搜索到相关数据！</string>
+    <string name="map_search_route">搜索路径</string>
+
+    <string name="ordRef_title">附近加油站</string>
+    <string name="map_search_title">路径规划</string>
+    <string name="load_remember">记住密码</string>
+    <string name="load_register">注册</string>
+    <string name="load_loadin">登录</string>
+    <string name="per_ino_quit">退出登录</string>
+    <string name="register_phonenum">手机号码</string>
+    <string name="register_pwd">密码</string>
+    <string name="register_sendYZM">发送验证码</string>
+    <string name="register_getYZM">获取验证码</string>
+    <string name="register_load">注册</string>
+    <string name="draw_top_nick">登录</string>
+    <string name="per_info_title">个人信息</string>
+    <string name="load_title">登录</string>
+
+    <string name="csy_form_tip">目前仅支持小型汽车查询</string>
+    <string name="csy_btn_query">开始查询</string>
+    <string name="csy_cxdz_lab">查询地</string>
+    <string name="csy_cxdz_tip">请选择查询地</string>
+    <string name="csy_chepai_lab">车牌号</string>
+    <string name="csy_chepai_tip">请输入车牌号后6位</string>
+    <string name="csy_chejia_lab">车架号</string>
+    <string name="csy_engine_lab">发动机号</string>
+    <string name="csy_close">关闭</string>
+    <string name="weizhang_query">违章查询</string>
+    <string name="weizhang_query_bottom">数据来源：车首页（http://www.cheshouye.com/）</string>
+    <string name="perinfo_button_cancel">取消</string>
+    <string name="perinfo_button_ok">确认</string>
+    <string name="perinfo_sex_man">男</string>
+    <string name="perinfo_sex_woman">女</string>
+    <string name="perinfo_sex_secret">保密</string>
+    <string name="perinfo_password">请输入密码</string>
+    <string name="perinfo_sure_password">输入确认密码</string>
+    <string name="carinfo_add">添加车辆</string>
+    <string name="carinfo_menu_scan">扫一扫</string>
+    <string name="carinfo_title">车辆信息</string>
+
+    <string name="item_car_info_total_oil_desc">总油量：</string>
+    <string name="item_car_info_licence">车牌号：</string>
+    <string name="item_car_info_engine_state_desc">发动机状态：</string>
+    <string name="item_car_info_trans_state_desc">变速器状态：</string>
+    <string name="item_car_info_light_state_desc">车灯状态：</string>
+    <string name="item_car_info_engine_no_desc">发动机号码：</string>
+    <string name="activity_car_info_list_empty">您还没有绑定任何车辆信息</string>
+    <string name="activity_car_info_list_empty_hint">快去绑定一辆车吧</string>
+    <string name="carinfo_delete">解绑</string>
+
+
+</resources>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_from_to_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/header_bg_color"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:id="@+id/ll_map_search"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_search_from"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/map_search_from"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/edit_seach_from"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:background="@drawable/text_search"
+                    android:completionThreshold="1"
+                    android:dropDownVerticalOffset="1.0dip"
+                    android:imeOptions="actionDone"
+                    android:inputType="text|textAutoComplete"
+                    android:maxLength="20"
+                    android:paddingRight="37.0dip"
+                    android:singleLine="true"
+                    android:text="@string/map_search_from_deafaut"
+                    android:textColor="#000000"
+                    android:textColorHint="@color/darkgrey"
+                    android:textSize="16.0sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_search_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/map_search_to"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/edit_seach_to"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:background="@drawable/text_search"
+                    android:completionThreshold="1"
+                    android:dropDownVerticalOffset="1.0dip"
+                    android:hint="@string/map_search_to_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="text|textAutoComplete"
+                    android:maxLength="20"
+                    android:paddingRight="37.0dip"
+                    android:singleLine="true"
+                    android:textColor="#000000"
+                    android:textColorHint="@color/darkgrey"
+                    android:textSize="16.0sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageButton
+            style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+            android:id="@+id/imgbtn_swap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ll_map_search"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/ll_map_search"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/ll_map_search"
+            android:src="@drawable/ic_swap_vert_24dp" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/act_background" >
+
+        <RelativeLayout
+            android:id="@+id/routemap_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_background" >
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:padding="5dp"
+            android:background="@drawable/bg_bottom_bar"
+            android:gravity="center_vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/firstline"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginLeft="12dp"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/secondline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/firstline"
+                android:layout_marginLeft="12dp"
+                android:gravity="right"
+                android:singleLine="true"
+                android:textColor="#999999"
+                android:textSize="13sp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/detail"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="详情"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:layout_width="7dp"
+                    android:layout_height="13dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@drawable/arrow_right_blue"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/route_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_layout"
+            android:layout_below="@id/routemap_header" >
+        </com.amap.api.maps.MapView>
+
+        <TextView
+            android:id="@+id/location_errInfo_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/red"
+            android:textColor="@color/darkgrey"
+            android:text="TextView"
+            android:visibility="gone"/>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

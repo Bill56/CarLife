@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_add_box_24dp"
+        android:title="@string/carinfo_add"
+        app:showAsAction="always">
+        <!--子菜单-->
+        <menu>
+            <item
+                android:id="@+id/action_scan_by_scan"
+                android:title="@string/carinfo_menu_scan"
+                android:icon="@drawable/ic_crop_free_24dp"
+                app:showAsAction="always"/>
+        </menu>
+    </item>
+
+</menu>

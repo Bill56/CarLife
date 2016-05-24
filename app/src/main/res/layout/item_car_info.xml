@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativeLayout"
+    android:background="#F0F0F0"
+    android:padding="16dp">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/auto_audi"
+            android:id="@+id/image_car_logo"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="奥迪Q5"
+            android:id="@+id/text_car_brand_version"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/image_car_logo"
+            android:layout_alignParentRight="true"
+            android:layout_toEndOf="@+id/image_car_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_car_info_total_oil_desc"
+            android:id="@+id/text_total_oil_desc"
+            android:layout_below="@+id/image_car_logo"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80L"
+            android:gravity="center"
+            android:id="@+id/text_total_oil"
+            android:layout_alignBottom="@+id/text_total_oil_desc"
+            android:layout_below="@+id/image_car_logo"
+            android:layout_alignEnd="@+id/text_car_brand_version"
+            android:layout_toEndOf="@+id/text_total_oil_desc" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_car_info_licence"
+            android:id="@+id/text_car_licence_desc"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/text_total_oil_desc"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="湘B12345"
+            android:id="@+id/text_car_licence"
+            android:gravity="center"
+            android:layout_alignTop="@+id/text_car_licence_desc"
+            android:layout_alignBottom="@+id/text_car_licence_desc"
+            android:layout_alignEnd="@+id/text_total_oil"
+            android:layout_toEndOf="@+id/text_car_licence_desc" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_car_info_engine_state_desc"
+            android:id="@+id/text_engine_state_desc"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_car_info_trans_state_desc"
+            android:id="@+id/text_trans_state_desc"
+            android:layout_below="@+id/text_engine_state_desc"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_car_info_light_state_desc"
+            android:id="@+id/text_light_state_desc"
+            android:layout_below="@+id/text_trans_state_desc"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_car_info_engine_no_desc"
+            android:id="@+id/text_engine_no_desc"
+            android:layout_below="@+id/text_light_state_desc"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正常"
+            android:gravity="right"
+            android:id="@+id/text_engine_state"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/text_engine_state_desc"
+            android:layout_alignBottom="@+id/text_engine_state_desc" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正常"
+            android:gravity="right"
+            android:id="@+id/text_trans_state"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/text_trans_state_desc"
+            android:layout_alignBottom="@+id/text_trans_state_desc" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正常"
+            android:gravity="right"
+            android:id="@+id/text_light_state"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/text_light_state_desc"
+            android:layout_alignBottom="@+id/text_light_state_desc" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1239113A"
+            android:gravity="right"
+            android:id="@+id/text_engine_no"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/text_engine_no_desc"
+            android:layout_alignBottom="@+id/text_engine_no_desc" />
+    </RelativeLayout>
+
+
+</LinearLayout>
