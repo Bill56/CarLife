@@ -1,5 +1,6 @@
 package com.bill56.util;
 
+import android.app.Service;
 import android.util.Log;
 
 
@@ -111,6 +112,78 @@ public class HttpUtil {
                     if (connection != null) {
                         connection.disconnect();
                     }
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 发送请求给指定网址并获得数据（访问内部）
+     *
+     * @param requestCode 请求代码
+     * @param requestData 请求的json数据
+     * @param listener    回调接口，用来处理网络返回的数据和异常的处理
+     */
+    public static void sendHttpRequestToInnerForCircle(final Service service,
+                                                final int requestCode,
+                                                final String requestData,
+                                                final HttpCallbackListener listener) {
+        // 开启线程访问网络
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                try {
+                    // 初始化访问地址
+                    URL url = new URL("http://" + ADDRESS_IP + ":" + ADDRESS_PORT
+                            + "/CarLifeServer/action/" + getActionFromRequestCode(requestCode));
+                    while (!Thread.interrupted()) {
+                        // 开启连接，请求服务器
+                        connection = (HttpURLConnection) url.openConnection();
+                        connection.setConnectTimeout(CONNECT_TIMEOUT);
+                        connection.setReadTimeout(READ_TIMEOUT);
+                        // 设置请求方式为Post
+                        connection.setRequestMethod("POST");
+                        // 将需要传递的数据进行转换
+                        String requestParams = "requestData=" + requestData;
+                        byte[] entity = requestParams.getBytes("utf-8");
+                        // 设置请求的参数，包括请求代码和请求的json数据
+                        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                        connection.setRequestProperty("Content-Length", String.valueOf(entity.length));
+                        connection.setDoInput(true);
+                        connection.setDoOutput(true);
+                        // 获取输出流，将数据传送给服务器
+                        OutputStream out = connection.getOutputStream();
+                        out.write(entity);
+                        // 获取输入流，将数据读取到本地
+                        InputStream in = connection.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        StringBuilder response = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+                        String strResponse = response.toString();
+                        strResponse = strResponse.trim();
+                        // 将strResponse中的转义字符的数据进行转换
+                        String desResponse = strResponse.replaceAll("&quot;", "\"");
+                        LogUtil.d(LogUtil.TAG, String.valueOf(desResponse + "，长度为：" + desResponse.length()));
+                        if (listener != null) {
+                            listener.onFinish(desResponse);
+                        }
+                        // 让线程休眠2秒
+                        Thread.sleep(2000);
+                    }
+                } catch (Exception e) {
+                    if (listener != null) {
+                        listener.onError(e);
+                    }
+                } finally {
+                    // 关闭连接，释放资源
+                    if (connection != null) {
+                        connection.disconnect();
+                    }
+                    service.stopSelf();
                 }
             }
         }).start();

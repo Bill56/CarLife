@@ -40,6 +40,7 @@ import com.bill56.activity.LoadActivity;
 import com.bill56.activity.OrdRefActivity;
 import com.bill56.activity.PerInfoActivity;
 import com.bill56.activity.WeiZhangQueryActivity;
+import com.bill56.service.QueryCarStateService;
 import com.bill56.util.ActivityUtil;
 import com.bill56.util.LogUtil;
 import com.bill56.util.Net;
@@ -88,7 +89,23 @@ public class MainActivity extends BaseActivity implements LocationSource,
         // 初始化抽屉布局
         initDrawLayout();
         init();
+        startQueryCarService();
+    }
 
+    /**
+     * 启动后台服务
+     */
+    private void startQueryCarService() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // 获取用户Id
+        int userId = preferences.getInt("id",0);
+        // 当id > 0的时候启动后台服务
+        if (userId > 0) {
+            LogUtil.d(LogUtil.TAG,"用户id为：" + userId);
+            Intent serviceIntent = new Intent(this, QueryCarStateService.class);
+            serviceIntent.putExtra("userId",userId);
+            startService(serviceIntent);
+        }
     }
 
     private void initDrawLayout() {
