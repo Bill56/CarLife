@@ -99,11 +99,13 @@ public class MainActivity extends BaseActivity implements LocationSource,
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // 获取用户Id
         int userId = preferences.getInt("id",0);
+        String userName = preferences.getString("name",null);
         // 当id > 0的时候启动后台服务
-        if (userId > 0) {
+        if (userId > 0 && userName != null) {
             LogUtil.d(LogUtil.TAG,"用户id为：" + userId);
             Intent serviceIntent = new Intent(this, QueryCarStateService.class);
             serviceIntent.putExtra("userId",userId);
+            serviceIntent.putExtra("userName",userName);
             startService(serviceIntent);
         }
     }

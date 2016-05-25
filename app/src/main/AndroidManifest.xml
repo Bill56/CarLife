@@ -88,6 +88,9 @@
         <activity android:name="com.bill56.zxing.activity.CaptureActivity">
 
         </activity>
+        <activity android:name="com.bill56.activity.NotificationDetailActivity">
+
+        </activity>
 
         <service android:name="com.bill56.service.QueryCarStateService">
 
