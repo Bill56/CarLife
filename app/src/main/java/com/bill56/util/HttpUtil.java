@@ -171,8 +171,8 @@ public class HttpUtil {
                         if (listener != null) {
                             listener.onFinish(desResponse);
                         }
-                        // 让线程休眠2秒
-                        Thread.sleep(2000);
+                        // 让线程休眠4秒
+                        Thread.sleep(4000);
                     }
                 } catch (Exception e) {
                     if (listener != null) {

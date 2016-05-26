@@ -20,6 +20,8 @@ import com.bill56.listener.HttpCallbackListener;
 import com.bill56.util.HttpUtil;
 import com.bill56.util.JSONUtil;
 import com.bill56.util.LogUtil;
+import com.bill56.util.NotificationUtil;
+
 import java.util.List;
 
 /**
@@ -35,8 +37,12 @@ public class QueryCarStateService extends Service {
     private final int RESPONSE_SUCCESS = 9001;
     // 服务器响应失败的标志
     private final int RESPONSE_FAILURE = 9002;
-    // 表示已经发过车辆维护通知了
+    // 表示是否发过车辆维护通知了
     private boolean isCarStateNotifi = false;
+    // 表示是否发过油量低的通知了
+    private boolean isCarOilNotifi = false;
+    // 表示是否发过里程多的通知了
+    private boolean isCarMileageNotifi = false;
 
     private Handler carStateHander = new Handler() {
         @Override
@@ -66,61 +72,185 @@ public class QueryCarStateService extends Service {
         // 说明解析数据成功
         if (userCars != null) {
             // 循环车辆列表，查看是否有不正常的状态
-            for (UserCar car : userCars) {
-                checkCarState(car);
-            }
+            checkCarState(userCars);
+            // 循环车辆列表，查看油量是否低于20%
+            checkCarOilPercent(userCars);
+            // 循环车辆列表，查看里程是否为15000的倍数
+            checkCarMileage(userCars);
         }
     }
 
     /**
      * 检车车辆状态
      *
-     * @param car 车辆对象
+     * @param userCars 车辆列表对象
      */
-    private void checkCarState(UserCar car) {
-        // 当发动机，变速器和车灯有一项不正常，并且没有发过通知的时候执行
-        if ((!"正常".equals(car.getCarEngineState())
-                || !"正常".equals(car.getCarTransState())
-                || !"正常".equals(car.getCarLightState()))
-                && !isCarStateNotifi) {
+    private void checkCarState(List<UserCar> userCars) {
+        StringBuilder carStateText = new StringBuilder();
+        // 正常的标志
+        boolean isNormal = true;
+        for (UserCar car : userCars) {
+            // 当发动机，变速器和车灯有一项不正常，并且没有发过通知的时候执行
+            if ((!"正常".equals(car.getCarEngineState())
+                    || !"正常".equals(car.getCarTransState())
+                    || !"正常".equals(car.getCarLightState()))
+                    && !isCarStateNotifi) {
+                // 判断哪个状态需要装入通知具体内容
+                carStateText.append("检测到您车牌为【" + car.getCarLicence() + "】的爱车有如下问题：\n");
+                if (!"正常".equals(car.getCarEngineState())) {
+                    carStateText.append("发动机：" + car.getCarEngineState() + "\n");
+                }
+                if (!"正常".equals(car.getCarTransState())) {
+                    carStateText.append("变速器：" + car.getCarTransState() + "\n");
+                }
+                if (!"正常".equals(car.getCarLightState())) {
+                    carStateText.append("车灯：" + car.getCarLightState() + "\n");
+                }
+                // 修改标志
+                isNormal = false;
+            }
+        }
+        // 当车辆不正常的时候且没发过通知的时候发通知
+        if (!isNormal && !isCarStateNotifi) {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("亲爱的" + userName)
                             .setContentText("检测到您的爱车似乎有些问题，请点击查看!")
-                    .setWhen(System.currentTimeMillis());
+                            .setWhen(System.currentTimeMillis())
+                            .setDefaults(NotificationCompat.DEFAULT_ALL);
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
-            StringBuilder carStateText = new StringBuilder();
-            // 判断哪个状态需要装入通知
-            if (!"正常".equals(car.getCarEngineState())) {
-                carStateText.append("发动机：" + car.getCarEngineState() + "\n");
-            }
-            if (!"正常".equals(car.getCarTransState())) {
-                carStateText.append("变速器：" + car.getCarTransState() + "\n");
-            }
-            if (!"正常".equals(car.getCarLightState())) {
-                carStateText.append("车灯：" + car.getCarLightState() + "\n");
-            }
-            resultIntent.putExtra("carState",carStateText.toString());
-            resultIntent.putExtra("notifiTime",System.currentTimeMillis());
+            resultIntent.putExtra("notifiContent", carStateText.toString());
+            resultIntent.putExtra("notifiTime", System.currentTimeMillis());
             // 通过TaskStackBuilder创建PendingIntent对象
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             stackBuilder.addParentStack(NotificationDetailActivity.class);
             stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent =
                     stackBuilder.getPendingIntent(
-                            0,
+                            NotificationUtil.CAR_STATE,
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
             mBuilder.setContentIntent(resultPendingIntent);
             NotificationManager mNotificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on.
-            mNotificationManager.notify(1, mBuilder.build());
+            mNotificationManager.notify(NotificationUtil.CAR_STATE, mBuilder.build());
+            // 修改标志位，表示已发过通知
             isCarStateNotifi = true;
         }
+    }
 
+    /**
+     * 检车车辆油耗是否低于20%
+     *
+     * @param userCars
+     */
+    private void checkCarOilPercent(List<UserCar> userCars) {
+        StringBuilder carStateText = new StringBuilder();
+        // 正常的标志
+        boolean isAbove20 = true;
+        for (UserCar car : userCars) {
+            // 计算油耗比
+            int carOilTotal = car.getCarOilTotal();
+            int carOilRest = car.getCarOilRest();
+            int percentInt = carOilRest * 100 / carOilTotal;
+            // 油量是否低于20%
+            if (percentInt <= 20) {
+                // 判断哪个状态需要装入通知具体内容
+                carStateText.append("检测到您车牌为【" + car.getCarLicence() + "】的爱车油量过低：\n");
+                carStateText.append("剩余油量：" + carOilRest + "L\n");
+                // 修改标志
+                isAbove20 = false;
+            }
+
+        }
+        // 当车辆不正常的时候且没发过通知的时候发通知
+        if (!isAbove20 && !isCarOilNotifi) {
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("亲爱的" + userName)
+                            .setContentText("检测到您爱车的油量过低，请点击查看!")
+                            .setWhen(System.currentTimeMillis())
+                            .setDefaults(NotificationCompat.DEFAULT_ALL);
+            // 创建意图
+            Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
+            resultIntent.putExtra("notifiContent", carStateText.toString());
+            resultIntent.putExtra("notifiTime", System.currentTimeMillis());
+            // 通过TaskStackBuilder创建PendingIntent对象
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(NotificationDetailActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            NotificationUtil.CAR_OIL,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // mId allows you to update the notification later on.
+            mNotificationManager.notify(NotificationUtil.CAR_OIL, mBuilder.build());
+            // 修改标志位，表示已发过通知
+            isCarOilNotifi = true;
+        }
+    }
+
+    /**
+     * 检测车辆里程是否为15000的倍数
+     *
+     * @param userCars 车辆列表
+     */
+    private void checkCarMileage(List<UserCar> userCars) {
+        StringBuilder carStateText = new StringBuilder();
+        // 正常的标志
+        boolean isMod = true;
+        for (UserCar car : userCars) {
+            // 计算里程
+            int carMileage = car.getCarMileage();
+            int carMileageMod = carMileage % 15000;
+            // 里程是否为15000的倍数
+            if (carMileageMod == 0) {
+                // 判断哪个状态需要装入通知具体内容
+                carStateText.append("检测到您车牌为【" + car.getCarLicence() + "】的爱车要保养啦：\n");
+                carStateText.append("行驶里程：" + carMileage + "公里\n");
+                // 修改标志
+                isMod = false;
+            }
+
+        }
+        // 当车辆不正常的时候且没发过通知的时候发通知
+        if (!isMod && !isCarMileageNotifi) {
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("亲爱的" + userName)
+                            .setContentText("检测到您爱车要保养了，请点击查看!")
+                            .setWhen(System.currentTimeMillis())
+                            .setDefaults(NotificationCompat.DEFAULT_ALL);
+            // 创建意图
+            Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
+            resultIntent.putExtra("notifiContent", carStateText.toString());
+            resultIntent.putExtra("notifiTime", System.currentTimeMillis());
+            // 通过TaskStackBuilder创建PendingIntent对象
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(NotificationDetailActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            NotificationUtil.CAR_MILE_AGE,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // mId allows you to update the notification later on.
+            mNotificationManager.notify(NotificationUtil.CAR_MILE_AGE, mBuilder.build());
+            // 修改标志位，表示已发过通知
+            isCarMileageNotifi = true;
+        }
     }
 
     @Nullable

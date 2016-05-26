@@ -51,6 +51,8 @@ public class MainActivity extends BaseActivity implements LocationSource,
 
     // 记录按下back键后的毫秒数
     private long lastBackPressed;
+    // 记录是否开启服务
+    private boolean isStartService = false;
 
     // 保存定位的精度
     private double longitude;
@@ -89,7 +91,6 @@ public class MainActivity extends BaseActivity implements LocationSource,
         // 初始化抽屉布局
         initDrawLayout();
         init();
-        startQueryCarService();
     }
 
     /**
@@ -101,12 +102,13 @@ public class MainActivity extends BaseActivity implements LocationSource,
         int userId = preferences.getInt("id",0);
         String userName = preferences.getString("name",null);
         // 当id > 0的时候启动后台服务
-        if (userId > 0 && userName != null) {
+        if (userId > 0 && userName != null && !isStartService) {
             LogUtil.d(LogUtil.TAG,"用户id为：" + userId);
             Intent serviceIntent = new Intent(this, QueryCarStateService.class);
             serviceIntent.putExtra("userId",userId);
             serviceIntent.putExtra("userName",userName);
             startService(serviceIntent);
+            isStartService = true;
         }
     }
 
@@ -216,6 +218,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         super.onResume();
         mapView.onResume();
         initName();
+        startQueryCarService();
     }
 
     /**
