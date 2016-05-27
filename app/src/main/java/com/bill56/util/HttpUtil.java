@@ -50,6 +50,14 @@ public class HttpUtil {
 
     public static final int REQUEST_QUERY_CAR_STATE = 300;
 
+    public static final int REQUEST_ADD_NOTIFICATION = 401;
+
+    public static final int REQUEST_QUERY_NOTIFICATION = 402;
+
+    public static final int REQUEST_DELETE_NOTIFICATION = 403;
+
+    public static final int REQUEST_CLEAR_NOTIFICATION = 404;
+
 
     /**
      * 发送请求给指定网址并获得数据（访问内部）
@@ -125,9 +133,9 @@ public class HttpUtil {
      * @param listener    回调接口，用来处理网络返回的数据和异常的处理
      */
     public static void sendHttpRequestToInnerForCircle(final Service service,
-                                                final int requestCode,
-                                                final String requestData,
-                                                final HttpCallbackListener listener) {
+                                                       final int requestCode,
+                                                       final String requestData,
+                                                       final HttpCallbackListener listener) {
         // 开启线程访问网络
         new Thread(new Runnable() {
             @Override
@@ -264,6 +272,14 @@ public class HttpUtil {
                 return "deleteUserCar";
             case REQUEST_QUERY_CAR_STATE:
                 return "queryCarState";
+            case REQUEST_ADD_NOTIFICATION:
+                return "addNotification";
+            case REQUEST_QUERY_NOTIFICATION:
+                return "queryNotification";
+            case REQUEST_DELETE_NOTIFICATION:
+                return "deleteNotification";
+            case REQUEST_CLEAR_NOTIFICATION:
+                return "clearNotification";
             default:
                 return "error";
         }

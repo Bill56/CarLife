@@ -69,6 +69,11 @@
     <string name="activity_car_info_list_empty">您还没有绑定任何车辆信息</string>
     <string name="activity_car_info_list_empty_hint">快去绑定一辆车吧</string>
     <string name="carinfo_delete">解绑</string>
+    <string name="activity_notification_empty">没有任何通知</string>
+    <string name="notification_title">通知</string>
+    <string name="notification_detail_title">详细</string>
+    <string name="notification_delete">删除</string>
+    <string name="notification_clear">清空通知</string>
 
 
 </resources>

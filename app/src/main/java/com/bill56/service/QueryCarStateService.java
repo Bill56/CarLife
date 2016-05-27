@@ -13,8 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.bill56.activity.NotificationDetailActivity;
-import com.bill56.carlife.MainActivity;
 import com.bill56.carlife.R;
+import com.bill56.entity.CarNotification;
 import com.bill56.entity.UserCar;
 import com.bill56.listener.HttpCallbackListener;
 import com.bill56.util.HttpUtil;
@@ -121,8 +121,9 @@ public class QueryCarStateService extends Service {
                             .setDefaults(NotificationCompat.DEFAULT_ALL);
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
+            long notifiTime = System.currentTimeMillis();
             resultIntent.putExtra("notifiContent", carStateText.toString());
-            resultIntent.putExtra("notifiTime", System.currentTimeMillis());
+            resultIntent.putExtra("notifiTime", notifiTime);
             // 通过TaskStackBuilder创建PendingIntent对象
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             stackBuilder.addParentStack(NotificationDetailActivity.class);
@@ -139,6 +140,25 @@ public class QueryCarStateService extends Service {
             mNotificationManager.notify(NotificationUtil.CAR_STATE, mBuilder.build());
             // 修改标志位，表示已发过通知
             isCarStateNotifi = true;
+            // 将通知进行封装
+            CarNotification notification = new CarNotification();
+            notification.setNotifiTime(notifiTime);
+            notification.setNotifiTitle("亲爱的" + userName + ",检测到您的爱车似乎有些问题，请点击查看!");
+            notification.setNotifiContent(carStateText.toString());
+            notification.setUserId(userId);
+            // 将通知传给服务器保存
+            HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_ADD_NOTIFICATION,
+                    JSONUtil.createNotificationJSON(notification), new HttpCallbackListener() {
+                        @Override
+                        public void onFinish(String response) {
+                            LogUtil.d(LogUtil.TAG,response);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            LogUtil.d(LogUtil.TAG,e.getMessage());
+                        }
+                    });
         }
     }
 
@@ -178,7 +198,8 @@ public class QueryCarStateService extends Service {
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
             resultIntent.putExtra("notifiContent", carStateText.toString());
-            resultIntent.putExtra("notifiTime", System.currentTimeMillis());
+            long notifiTime = System.currentTimeMillis();
+            resultIntent.putExtra("notifiTime", notifiTime);
             // 通过TaskStackBuilder创建PendingIntent对象
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             stackBuilder.addParentStack(NotificationDetailActivity.class);
@@ -195,6 +216,25 @@ public class QueryCarStateService extends Service {
             mNotificationManager.notify(NotificationUtil.CAR_OIL, mBuilder.build());
             // 修改标志位，表示已发过通知
             isCarOilNotifi = true;
+            // 将通知进行封装
+            CarNotification notification = new CarNotification();
+            notification.setNotifiTime(notifiTime);
+            notification.setNotifiTitle("亲爱的" + userName + ",检测到您爱车的油量过低，请点击查看!");
+            notification.setNotifiContent(carStateText.toString());
+            notification.setUserId(userId);
+            // 将通知传给服务器保存
+            HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_ADD_NOTIFICATION,
+                    JSONUtil.createNotificationJSON(notification), new HttpCallbackListener() {
+                        @Override
+                        public void onFinish(String response) {
+                            LogUtil.d(LogUtil.TAG,response);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            LogUtil.d(LogUtil.TAG,e.getMessage());
+                        }
+                    });
         }
     }
 
@@ -233,7 +273,8 @@ public class QueryCarStateService extends Service {
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
             resultIntent.putExtra("notifiContent", carStateText.toString());
-            resultIntent.putExtra("notifiTime", System.currentTimeMillis());
+            long notifiTime = System.currentTimeMillis();
+            resultIntent.putExtra("notifiTime", notifiTime);
             // 通过TaskStackBuilder创建PendingIntent对象
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
             stackBuilder.addParentStack(NotificationDetailActivity.class);
@@ -250,6 +291,25 @@ public class QueryCarStateService extends Service {
             mNotificationManager.notify(NotificationUtil.CAR_MILE_AGE, mBuilder.build());
             // 修改标志位，表示已发过通知
             isCarMileageNotifi = true;
+            // 将通知进行封装
+            CarNotification notification = new CarNotification();
+            notification.setNotifiTime(notifiTime);
+            notification.setNotifiTitle("亲爱的" + userName + ",检测到您爱车要保养了，请点击查看!");
+            notification.setNotifiContent(carStateText.toString());
+            notification.setUserId(userId);
+            // 将通知传给服务器保存
+            HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_ADD_NOTIFICATION,
+                    JSONUtil.createNotificationJSON(notification), new HttpCallbackListener() {
+                        @Override
+                        public void onFinish(String response) {
+                            LogUtil.d(LogUtil.TAG,response);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            LogUtil.d(LogUtil.TAG,e.getMessage());
+                        }
+                    });
         }
     }
 

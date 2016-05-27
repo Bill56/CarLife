@@ -1,6 +1,7 @@
 package com.bill56.util;
 
 
+import com.bill56.entity.CarNotification;
 import com.bill56.entity.User;
 import com.bill56.entity.UserCar;
 
@@ -444,6 +445,107 @@ public class JSONUtil {
             deleteResult = 0;
         }
         return deleteResult;
+    }
+
+    /**
+     * 创建通知的json数据
+     *
+     * @param notification 通知对象集合
+     * @return json数据
+     */
+    public static String createNotificationJSON(CarNotification notification) {
+        String jsonInfo = new String();
+        // 创建json格式的数据对象，该对象是一个包含n个json数据对象的集合
+        try {
+            JSONArray jsonArray = new JSONArray();
+            // 创建一个json类，对应通知对象
+            JSONObject jsonNotifi = new JSONObject();
+            // 保存通知
+            jsonNotifi.put("notifiTime", notification.getNotifiTime());
+            jsonNotifi.put("notifiTitle", notification.getNotifiTitle());
+            jsonNotifi.put("notifiContent", notification.getNotifiContent());
+            jsonNotifi.put("userId", notification.getUserId());
+            // 将jsonUser放入jsonArray
+            jsonArray.put(jsonNotifi);
+            // 将jsonArray编程json字符串
+            jsonInfo = jsonArray.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jsonInfo;
+    }
+
+    public static String createQueryNotificationJSON(int userId) {
+        return createQueryUserCar(userId);
+    }
+
+    public static List<CarNotification> parseQueryNotificationJSON(String jsonResponse) {
+        ArrayList<CarNotification> notifications = new ArrayList<>();
+        try {
+            // 将json字符串转成jsonArray对象
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            // 循环获取json中的对象
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (i == 0) {
+                    // 获取第一个对象中的queryResult，若为正数说明查询成功
+                    int queryResult = jsonObject.getInt("queryResult");
+                    if (queryResult <= 0) {
+                        // 查询不成功，直接返回null
+                        return null;
+                    }
+                }
+                // 获取其他的数据
+                CarNotification notification = new CarNotification();
+                notification.setUserId(jsonObject.getInt("userId"));
+                notification.setNotifiTime(jsonObject.getLong("notifiTime"));
+                notification.setNotifiTitle(jsonObject.getString("notifiTitle"));
+                notification.setNotifiContent(jsonObject.getString("notifiContent"));
+                // 添加到列表
+                notifications.add(notification);
+            }
+            // 获取一个json数据对象
+        } catch (JSONException e) {
+            e.printStackTrace();
+            notifications = null;
+        }
+        return notifications;
+    }
+
+    /**
+     * 根据通知id(通知时间)创建json数据
+     *
+     * @param notifiTime 通知时间
+     * @return json数据
+     */
+    public static String createDeleteNotifiJSON(long notifiTime) {
+        String jsonInfo = new String();
+        // 创建json格式的数据对象，该对象是一个包含n个json数据对象的集合
+        try {
+            JSONArray jsonArray = new JSONArray();
+            // 创建一个json类，对应用户车辆对象
+            JSONObject jsonNotifi = new JSONObject();
+            // 保存用户和车辆信息
+            jsonNotifi.put("notifiTime", notifiTime);
+            // 将jsonUser放入jsonArray
+            jsonArray.put(jsonNotifi);
+            // 将jsonArray编程json字符串
+            jsonInfo = jsonArray.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jsonInfo;
+    }
+
+    /**
+     * 根据用户的id创建json数据
+     * @param userId    用户id
+     * @return  json数据
+     */
+    public static String createClearNotifiJSON(int userId) {
+        return createQueryUserCar(userId);
     }
 
 }

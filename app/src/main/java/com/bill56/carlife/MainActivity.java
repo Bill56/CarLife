@@ -37,6 +37,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bill56.activity.BaseActivity;
 import com.bill56.activity.LoadActivity;
+import com.bill56.activity.NotificationActivity;
 import com.bill56.activity.OrdRefActivity;
 import com.bill56.activity.PerInfoActivity;
 import com.bill56.activity.WeiZhangQueryActivity;
@@ -99,14 +100,14 @@ public class MainActivity extends BaseActivity implements LocationSource,
     private void startQueryCarService() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // 获取用户Id
-        int userId = preferences.getInt("id",0);
-        String userName = preferences.getString("name",null);
+        int userId = preferences.getInt("id", 0);
+        String userName = preferences.getString("name", null);
         // 当id > 0的时候启动后台服务
         if (userId > 0 && userName != null && !isStartService) {
-            LogUtil.d(LogUtil.TAG,"用户id为：" + userId);
+            LogUtil.d(LogUtil.TAG, "用户id为：" + userId);
             Intent serviceIntent = new Intent(this, QueryCarStateService.class);
-            serviceIntent.putExtra("userId",userId);
-            serviceIntent.putExtra("userName",userName);
+            serviceIntent.putExtra("userId", userId);
+            serviceIntent.putExtra("userName", userName);
             startService(serviceIntent);
             isStartService = true;
         }
@@ -448,6 +449,38 @@ public class MainActivity extends BaseActivity implements LocationSource,
             dialog.show();
         } else {
             ActivityUtil.startCarInfoActivity(this, userId, false);
+        }
+    }
+
+    /**
+     * 当用户点击通知后执行的方法
+     *
+     * @param v 被点击的事件源
+     */
+    public void Notifications(View v) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = preferences.getString("name", null);
+        int userId = preferences.getInt("id", 0);
+        if (name == null || userId <= 0) {
+            // 弹出对话框，让其登录
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("提示");
+            builder.setMessage("您还未登录，请登录后查询");
+            builder.setCancelable(false);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    startActivity(new Intent(MainActivity.this, LoadActivity.class));
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // 进入通知活动
+            Intent notifiIntent = new Intent(this, NotificationActivity.class);
+            notifiIntent.putExtra("userId",userId);
+            startActivity(notifiIntent);
         }
     }
 

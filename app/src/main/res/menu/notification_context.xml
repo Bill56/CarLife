@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--长按可弹出的菜单，包含删除通知信息-->
+    <item
+        android:id="@+id/action_delete_notifi"
+        android:title="@string/notification_delete" />
+</menu>
