@@ -1,11 +1,13 @@
 package com.bill56.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -216,24 +218,39 @@ public class NotificationActivity extends BaseActivity {
      * 删除用户的所有通知
      */
     private void doClearNotification() {
-        showProgressDialog("正在清空......");
-        HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_CLEAR_NOTIFICATION,
-                JSONUtil.createClearNotifiJSON(userId), new HttpCallbackListener() {
-                    Message message = new Message();
-                    @Override
-                    public void onFinish(String response) {
-                        message.what = CLEAR_SUCCESS;
-                        message.obj = response;
-                        notifiHandler.sendMessage(message);
-                    }
+        // 弹出警告框询问是否删除
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("清除通知");
+        builder.setMessage("通知一旦清空不能撤回，确认清空通知么？");
+        builder.setNegativeButton(R.string.perinfo_button_cancel, null);
+        builder.setPositiveButton(R.string.perinfo_button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                showProgressDialog("正在清空......");
+                HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_CLEAR_NOTIFICATION,
+                        JSONUtil.createClearNotifiJSON(userId), new HttpCallbackListener() {
+                            Message message = new Message();
 
-                    @Override
-                    public void onError(Exception e) {
-                        message.what = QUERY_FAILURE;
-                        message.obj = "服务器异常";
-                        notifiHandler.sendMessage(message);
-                    }
-                });
+                            @Override
+                            public void onFinish(String response) {
+                                message.what = CLEAR_SUCCESS;
+                                message.obj = response;
+                                notifiHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                message.what = QUERY_FAILURE;
+                                message.obj = "服务器异常";
+                                notifiHandler.sendMessage(message);
+                            }
+                        });
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     /**

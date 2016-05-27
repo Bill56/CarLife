@@ -118,6 +118,33 @@ public class CarInfoAdapter extends BaseAdapter {
                 case "本田":
                     imgCarLogo.setImageResource(R.drawable.auto_honda);
                     break;
+                case "福特":
+                    imgCarLogo.setImageResource(R.drawable.auto_ford);
+                    break;
+                case "玛莎拉蒂":
+                    imgCarLogo.setImageResource(R.drawable.auto_maserati);
+                    break;
+                case "马自达":
+                    imgCarLogo.setImageResource(R.drawable.auto_mazda);
+                    break;
+                case "现代":
+                    imgCarLogo.setImageResource(R.drawable.auto_hyundai);
+                    break;
+                case "大众":
+                    imgCarLogo.setImageResource(R.drawable.auto_volkswagen);
+                    break;
+                case "日产":
+                    imgCarLogo.setImageResource(R.drawable.auto_nissan);
+                    break;
+                case "斯柯达":
+                    imgCarLogo.setImageResource(R.drawable.auto_skoda);
+                    break;
+                case "雪弗兰":
+                    imgCarLogo.setImageResource(R.drawable.auto_chevrolet);
+                    break;
+                case "三菱":
+                    imgCarLogo.setImageResource(R.drawable.auto_mitsubishi);
+                    break;
                 default:
                     imgCarLogo.setImageResource(R.drawable.auto_abarth);
                     break;
