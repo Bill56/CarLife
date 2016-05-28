@@ -118,7 +118,8 @@ public class QueryCarStateService extends Service {
                             .setContentTitle("亲爱的" + userName)
                             .setContentText("检测到您的爱车似乎有些问题，请点击查看!")
                             .setWhen(System.currentTimeMillis())
-                            .setDefaults(NotificationCompat.DEFAULT_ALL);
+                            .setDefaults(NotificationCompat.DEFAULT_ALL)
+                            .setAutoCancel(true);
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
             long notifiTime = System.currentTimeMillis();
@@ -151,12 +152,12 @@ public class QueryCarStateService extends Service {
                     JSONUtil.createNotificationJSON(notification), new HttpCallbackListener() {
                         @Override
                         public void onFinish(String response) {
-                            LogUtil.d(LogUtil.TAG,response);
+                            LogUtil.d(LogUtil.TAG, response);
                         }
 
                         @Override
                         public void onError(Exception e) {
-                            LogUtil.d(LogUtil.TAG,e.getMessage());
+                            LogUtil.d(LogUtil.TAG, e.getMessage());
                         }
                     });
         }
@@ -194,7 +195,8 @@ public class QueryCarStateService extends Service {
                             .setContentTitle("亲爱的" + userName)
                             .setContentText("检测到您爱车的油量过低，请点击查看!")
                             .setWhen(System.currentTimeMillis())
-                            .setDefaults(NotificationCompat.DEFAULT_ALL);
+                            .setDefaults(NotificationCompat.DEFAULT_ALL)
+                            .setAutoCancel(true);
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
             resultIntent.putExtra("notifiContent", carStateText.toString());
@@ -227,12 +229,12 @@ public class QueryCarStateService extends Service {
                     JSONUtil.createNotificationJSON(notification), new HttpCallbackListener() {
                         @Override
                         public void onFinish(String response) {
-                            LogUtil.d(LogUtil.TAG,response);
+                            LogUtil.d(LogUtil.TAG, response);
                         }
 
                         @Override
                         public void onError(Exception e) {
-                            LogUtil.d(LogUtil.TAG,e.getMessage());
+                            LogUtil.d(LogUtil.TAG, e.getMessage());
                         }
                     });
         }
@@ -269,7 +271,8 @@ public class QueryCarStateService extends Service {
                             .setContentTitle("亲爱的" + userName)
                             .setContentText("检测到您爱车要保养了，请点击查看!")
                             .setWhen(System.currentTimeMillis())
-                            .setDefaults(NotificationCompat.DEFAULT_ALL);
+                            .setDefaults(NotificationCompat.DEFAULT_ALL)
+                            .setAutoCancel(true);
             // 创建意图
             Intent resultIntent = new Intent(this, NotificationDetailActivity.class);
             resultIntent.putExtra("notifiContent", carStateText.toString());
@@ -302,12 +305,12 @@ public class QueryCarStateService extends Service {
                     JSONUtil.createNotificationJSON(notification), new HttpCallbackListener() {
                         @Override
                         public void onFinish(String response) {
-                            LogUtil.d(LogUtil.TAG,response);
+                            LogUtil.d(LogUtil.TAG, response);
                         }
 
                         @Override
                         public void onError(Exception e) {
-                            LogUtil.d(LogUtil.TAG,e.getMessage());
+                            LogUtil.d(LogUtil.TAG, e.getMessage());
                         }
                     });
         }
