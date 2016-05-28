@@ -1,6 +1,9 @@
 package com.bill56.carlife;
 
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,9 +43,11 @@ import com.bill56.activity.LoadActivity;
 import com.bill56.activity.NotificationActivity;
 import com.bill56.activity.OrdRefActivity;
 import com.bill56.activity.PerInfoActivity;
+import com.bill56.activity.SeekActivity;
 import com.bill56.activity.WeiZhangQueryActivity;
 import com.bill56.service.QueryCarStateService;
 import com.bill56.util.ActivityUtil;
+import com.bill56.util.BlueTooth;
 import com.bill56.util.LogUtil;
 import com.bill56.util.Net;
 
@@ -82,16 +87,23 @@ public class MainActivity extends BaseActivity implements LocationSource,
         }
     };
 
+    // 蓝牙管理类
+    private static BluetoothManager manager;
+    public static BluetoothAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //  requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
         setContentView(R.layout.activity_main);
+        manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         // 初始化抽屉布局
         initDrawLayout();
         init();
+        //判断蓝牙是否连接
+        BluetoothConn(1);
     }
 
     /**
@@ -323,6 +335,62 @@ public class MainActivity extends BaseActivity implements LocationSource,
     }
 
     /**
+     * 以下是对蓝牙操作的方法
+     */
+    public static void initBluetoothAdapter() {
+        adapter = manager.getAdapter();
+    }
+
+    public static BluetoothAdapter getAdapter() {
+        return adapter;
+    }
+
+    /**
+     * 开启蓝牙连接设备
+     */
+    public void BluetoothConn(int style) {
+        initBluetoothAdapter();
+        AccessBlueTooth(adapter, style);
+    }
+
+    /**
+     * 检测蓝牙是否开启
+     *
+     * @param adapter
+     */
+    private void AccessBlueTooth(BluetoothAdapter adapter, int style) {
+        BlueTooth blueTooth = BlueTooth.getInstance(this);
+        blueTooth.scanLeDevice(true);
+        if (adapter == null || !adapter.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, style);
+        } else {
+            if (style == 1) {
+                Intent intent = new Intent(MainActivity.this, SeekActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (resultCode == 1) {
+                //用户开启蓝牙时执行
+                Toast.makeText(MainActivity.this, "蓝牙服务开通", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SeekActivity.class);
+                startActivity(intent);
+            }
+        } else {
+            //用户未开启蓝牙时执行
+            Toast.makeText(MainActivity.this, "未开通蓝牙服务", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+
+    /**
      * 下面是针对用户点击了左侧抽屉布局的选项后进行的方法绑定
      */
 
@@ -495,4 +563,8 @@ public class MainActivity extends BaseActivity implements LocationSource,
         }
         lastBackPressed = currentTime;
     }
+
+
+
+
 }

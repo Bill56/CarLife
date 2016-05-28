@@ -29,6 +29,11 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <!-- 跟蓝牙有关的权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_car_logo"
@@ -94,8 +99,16 @@
         <activity android:name="com.bill56.activity.NotificationActivity">
 
         </activity>
+        <activity android:name="com.bill56.activity.SeekActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light.Dialog"
+            android:label="附近的蓝牙设备">
+
+        </activity>
 
         <service android:name="com.bill56.service.QueryCarStateService">
+
+        </service>
+        <service android:name="com.bill56.service.BlueService">
 
         </service>
 
