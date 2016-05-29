@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         // 初始化抽屉布局
         initDrawLayout();
         init();
-        //判断蓝牙是否连接
+//        判断蓝牙是否连接
         BluetoothConn(1);
     }
 

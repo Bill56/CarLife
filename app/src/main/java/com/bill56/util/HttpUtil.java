@@ -48,6 +48,8 @@ public class HttpUtil {
 
     public static final int REQUEST_DELETE_CAR = 203;
 
+    public static final int REQUEST_UPDATE_CAR = 204;
+
     public static final int REQUEST_QUERY_CAR_STATE = 300;
 
     public static final int REQUEST_ADD_NOTIFICATION = 401;
@@ -272,6 +274,8 @@ public class HttpUtil {
                 return "deleteUserCar";
             case REQUEST_QUERY_CAR_STATE:
                 return "queryCarState";
+            case REQUEST_UPDATE_CAR:
+                return "updateUserCar";
             case REQUEST_ADD_NOTIFICATION:
                 return "addNotification";
             case REQUEST_QUERY_NOTIFICATION:

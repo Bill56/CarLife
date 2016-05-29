@@ -275,7 +275,7 @@ public class JSONUtil {
      * @return 封装了用户和车辆信息的对象
      */
     public static UserCar parseUserCarJSON(String jsonResponse) {
-// 根据解析的值创建一个carInfo对象
+        // 根据解析的值创建一个carInfo对象
         UserCar userCar = new UserCar();
         try {
             // 将json字符串转成jsonArray对象
@@ -541,8 +541,9 @@ public class JSONUtil {
 
     /**
      * 根据用户的id创建json数据
-     * @param userId    用户id
-     * @return  json数据
+     *
+     * @param userId 用户id
+     * @return json数据
      */
     public static String createClearNotifiJSON(int userId) {
         return createQueryUserCar(userId);
