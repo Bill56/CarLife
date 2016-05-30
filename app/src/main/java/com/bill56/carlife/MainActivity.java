@@ -101,9 +101,9 @@ public class MainActivity extends BaseActivity implements LocationSource,
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         // 初始化抽屉布局
         initDrawLayout();
-        init();
-//        判断蓝牙是否连接
+        //        判断蓝牙是否连接
         BluetoothConn(1);
+        init();
     }
 
     /**
@@ -388,8 +388,6 @@ public class MainActivity extends BaseActivity implements LocationSource,
     }
 
 
-
-
     /**
      * 下面是针对用户点击了左侧抽屉布局的选项后进行的方法绑定
      */
@@ -547,7 +545,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         } else {
             // 进入通知活动
             Intent notifiIntent = new Intent(this, NotificationActivity.class);
-            notifiIntent.putExtra("userId",userId);
+            notifiIntent.putExtra("userId", userId);
             startActivity(notifiIntent);
         }
     }
@@ -563,8 +561,5 @@ public class MainActivity extends BaseActivity implements LocationSource,
         }
         lastBackPressed = currentTime;
     }
-
-
-
 
 }

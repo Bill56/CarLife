@@ -356,6 +356,7 @@ public class OrdRefActivity extends BaseActivity implements LocationSource,
                 map.put("gastprice", gastprice);
                 map.put("fwlsmc", fwlsmc);
                 map.put("distance", distance);
+                map.put("getArray",data);
                 list.add(map);
             }
 

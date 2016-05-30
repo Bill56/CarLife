@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.zj.activity.PayResultActivity">
+
+    <ImageView
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        android:id="@+id/imageView_result"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_perm_identity_24dp"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="历史订单"
+        android:id="@+id/button_back"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/loadin_button"
+        android:onClick="ToList"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="回到主界面"
+        android:layout_marginTop="20dp"
+        android:id="@+id/button_toList"
+        android:onClick="ToMain"
+        android:background="@drawable/quit_button" />
+
+</LinearLayout>

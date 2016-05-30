@@ -104,6 +104,15 @@
             android:label="附近的蓝牙设备">
 
         </activity>
+        <activity android:name="com.bill56.activity.GasoinfoActivity">
+
+        </activity>
+        <activity android:name="com.bill56.activity.HistListActivity">
+
+        </activity>
+        <activity android:name="com.bill56.activity.PayResultActivity">
+
+        </activity>
 
         <service android:name="com.bill56.service.QueryCarStateService">
 

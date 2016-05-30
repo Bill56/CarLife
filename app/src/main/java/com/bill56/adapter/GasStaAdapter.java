@@ -1,6 +1,7 @@
 package com.bill56.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.amap.api.location.CoordinateConverter;
 import com.amap.api.location.DPoint;
+import com.bill56.activity.GasoinfoActivity;
 import com.bill56.activity.OrdRefActivity;
 import com.bill56.carlife.R;
 import com.bill56.customui.ImageLayout;
@@ -85,78 +87,87 @@ public class GasStaAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         // 获取当前项
         final int i = position;
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.list_gasstation, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.textView_num = (TextView) convertView.findViewById(R.id.textView_num);
-            viewHolder.textView_GSname = (TextView) convertView.findViewById(R.id.textView_GSname);
-            viewHolder.textView_distance = (TextView) convertView.findViewById(R.id.textView_distance);
-            viewHolder.textView_brandname = (TextView) convertView.findViewById(R.id.textView_brandname);
-            viewHolder.textView_93 = (TextView) convertView.findViewById(R.id.textView_93);
-            viewHolder.textView_90 = (TextView) convertView.findViewById(R.id.textView_90);
-            viewHolder.textView_97 = (TextView) convertView.findViewById(R.id.textView_97);
-            viewHolder.textView_0 = (TextView) convertView.findViewById(R.id.textView_0);
-            viewHolder.textView_price0 = (TextView) convertView.findViewById(R.id.textView_price0);
-            viewHolder.textView_price90 = (TextView) convertView.findViewById(R.id.textView_price90);
-            viewHolder.textView_price93 = (TextView) convertView.findViewById(R.id.textView_price93);
-            viewHolder.textView_price97 = (TextView) convertView.findViewById(R.id.textView_price97);
-            viewHolder.textView_address = (TextView) convertView.findViewById(R.id.textView_address);
-            viewHolder.image_layout1 = (ImageLayout) convertView.findViewById(R.id.layout_roate);
-            viewHolder.image_layout1.setImageResource(R.drawable.ic_navigation_24dp);
-            viewHolder.image_layout1.setTextViewText("路径规划");
-            viewHolder.image_layout2 = (ImageLayout) convertView.findViewById(R.id.layout_ordRef);
-            viewHolder.image_layout2.setImageResource(R.drawable.ic_gas_station);
-            viewHolder.image_layout2.setTextViewText("预约加油");
-            View.OnClickListener listener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int id = v.getId();
-                    if (id == R.id.layout_ordRef) {
-                        //预约加油
-                        Log.d("adapter", "预约加油");
-                    } else if (id == R.id.layout_roate) {
-                        //路径规划
-                        Log.d("adapter", "路径规划");
-                        doRoute();
-                    }
+        convertView = layoutInflater.inflate(R.layout.list_gasstation, parent, false);
+        viewHolder = new ViewHolder();
+        viewHolder.textView_num = (TextView) convertView.findViewById(R.id.textView_num);
+        viewHolder.textView_GSname = (TextView) convertView.findViewById(R.id.textView_GSname);
+        viewHolder.textView_distance = (TextView) convertView.findViewById(R.id.textView_distance);
+        viewHolder.textView_brandname = (TextView) convertView.findViewById(R.id.textView_brandname);
+        viewHolder.textView_93 = (TextView) convertView.findViewById(R.id.textView_93);
+        viewHolder.textView_90 = (TextView) convertView.findViewById(R.id.textView_90);
+        viewHolder.textView_97 = (TextView) convertView.findViewById(R.id.textView_97);
+        viewHolder.textView_0 = (TextView) convertView.findViewById(R.id.textView_0);
+        viewHolder.textView_price0 = (TextView) convertView.findViewById(R.id.textView_price0);
+        viewHolder.textView_price90 = (TextView) convertView.findViewById(R.id.textView_price90);
+        viewHolder.textView_price93 = (TextView) convertView.findViewById(R.id.textView_price93);
+        viewHolder.textView_price97 = (TextView) convertView.findViewById(R.id.textView_price97);
+        viewHolder.textView_address = (TextView) convertView.findViewById(R.id.textView_address);
+        viewHolder.image_layout1 = (ImageLayout) convertView.findViewById(R.id.layout_roate);
+        viewHolder.image_layout1.setImageResource(R.drawable.ic_navigation_24dp);
+        viewHolder.image_layout1.setTextViewText("路径规划");
+        viewHolder.image_layout2 = (ImageLayout) convertView.findViewById(R.id.layout_ordRef);
+        viewHolder.image_layout2.setImageResource(R.drawable.ic_gas_station);
+        viewHolder.image_layout2.setTextViewText("预约加油");
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = v.getId();
+                if (id == R.id.layout_ordRef) {
+                    //预约加油
+                    Log.d("adapter", "预约加油");
+                    doRefuOil();
+                } else if (id == R.id.layout_roate) {
+                    //路径规划
+                    Log.d("adapter", "路径规划");
+                    doRoute();
                 }
-                // 执行路径导航的方法
-                private void doRoute() {
-                    double startLat = OrdRefActivity.getmLatitude();
-                    double startLang = OrdRefActivity.getmLangiitude();
-                    // 获得目的地经纬度
-                    DPoint baiduLatLng = new DPoint(
-                            Double.parseDouble(list.get(i).get("lat")),
-                            Double.parseDouble(list.get(i).get("lon")));
-                    // 将百度地图坐标转换成高德地图坐标
-                    CoordinateConverter converter = new CoordinateConverter(context);
-                    // CoordType.BAIDU 待转换坐标类型
-                    converter.from(CoordinateConverter.CoordType.BAIDU);
-                    // sourceLatLng待转换坐标点 DPoint类型
-                    // 目标坐标，默认为原来的坐标
-                    DPoint desLatLng = baiduLatLng;
-                    try {
-                        converter.coord(baiduLatLng);
-                        // 执行转换操作
-                        desLatLng = converter.convert();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    // 获取目的地的经纬度参数
-                    double endLat = desLatLng.getLatitude();
-                    double endLang = desLatLng.getLongitude();
-                    String endAddress = viewHolder.textView_GSname.getText().toString();
-                    ActivityUtil.startMapSearchActivity(context,startLang,startLat,endLang,endLat,endAddress);
+            }
+
+            // 执行路径导航的方法
+            private void doRoute() {
+                double startLat = OrdRefActivity.getmLatitude();
+                double startLang = OrdRefActivity.getmLangiitude();
+                // 获得目的地经纬度
+                DPoint baiduLatLng = new DPoint(
+                        Double.parseDouble(list.get(i).get("lat")),
+                        Double.parseDouble(list.get(i).get("lon")));
+                // 将百度地图坐标转换成高德地图坐标
+                CoordinateConverter converter = new CoordinateConverter(context);
+                // CoordType.BAIDU 待转换坐标类型
+                converter.from(CoordinateConverter.CoordType.BAIDU);
+                // sourceLatLng待转换坐标点 DPoint类型
+                // 目标坐标，默认为原来的坐标
+                DPoint desLatLng = baiduLatLng;
+                try {
+                    converter.coord(baiduLatLng);
+                    // 执行转换操作
+                    desLatLng = converter.convert();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            };
-            // 为按钮注册点击的事件监听
-            viewHolder.image_layout1.setOnClickListener(listener);
-            viewHolder.image_layout2.setOnClickListener(listener);
-            // 封装到viewHolder
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+                // 获取目的地的经纬度参数
+                double endLat = desLatLng.getLatitude();
+                double endLang = desLatLng.getLongitude();
+                String endAddress = viewHolder.textView_GSname.getText().toString();
+                ActivityUtil.startMapSearchActivity(context, startLang, startLat, endLang, endLat, endAddress);
+            }
+
+            /**
+             * 预约加油的方法
+             */
+            private void doRefuOil() {
+                HashMap<String, String> map = list.get(i);
+                String data = map.get("getArray");
+                Intent intent = new Intent(context, GasoinfoActivity.class);
+                intent.putExtra("maps", data);
+                intent.putExtra("index", i);
+                context.startActivity(intent);
+            }
+        };
+        // 为按钮注册点击的事件监听
+        viewHolder.image_layout1.setOnClickListener(listener);
+        viewHolder.image_layout2.setOnClickListener(listener);
+
 
         //加载position中的数据
         HashMap<String, String> map = list.get(position);
