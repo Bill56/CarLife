@@ -56,6 +56,8 @@ import com.bill56.util.Net;
 public class MainActivity extends BaseActivity implements LocationSource,
         AMapLocationListener, RadioGroup.OnCheckedChangeListener {
 
+    // 记录是否开过蓝牙
+    private boolean isStartBlue = false;
     // 记录按下back键后的毫秒数
     private long lastBackPressed;
     // 记录是否开启服务
@@ -102,8 +104,6 @@ public class MainActivity extends BaseActivity implements LocationSource,
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         // 初始化抽屉布局
         initDrawLayout();
-        //        判断蓝牙是否连接
-        // BluetoothConn(1);
         init();
     }
 
@@ -281,6 +281,11 @@ public class MainActivity extends BaseActivity implements LocationSource,
                 longitude = amapLocation.getLongitude();
                 latitude = amapLocation.getLatitude();
                 LogUtil.d("MainActivity", "longitude=" + longitude + ",latitude=" + latitude);
+                if (!isStartBlue) {
+                    //        判断蓝牙是否连接
+                    BluetoothConn(1);
+                    isStartBlue = true;
+                }
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
                 Log.e("AmapErr", errText);

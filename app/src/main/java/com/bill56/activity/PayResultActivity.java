@@ -1,7 +1,6 @@
 package com.bill56.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +11,9 @@ import com.bill56.carlife.MainActivity;
 import com.bill56.carlife.R;
 import com.bill56.util.ActivityUtil;
 
-
+/**
+ * 支付结果的活动
+ */
 public class PayResultActivity extends BaseActivity {
 
     private ImageView imageView_result;
@@ -65,7 +66,7 @@ public class PayResultActivity extends BaseActivity {
      */
     public void ToList(View v) {
         Intent intent = new Intent(PayResultActivity.this, HistListActivity.class);
-        intent.putExtra("userId",getIntent().getIntExtra("userId",0));
+        intent.putExtra("userId", getIntent().getIntExtra("userId", 0));
         startActivity(intent);
     }
 

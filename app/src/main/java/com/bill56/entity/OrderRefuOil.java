@@ -1,5 +1,9 @@
 package com.bill56.entity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 
 /**
@@ -147,6 +151,30 @@ public class OrderRefuOil {
 
 	public void setUserTel(String userTel) {
 		this.userTel = userTel;
+	}
+
+	/**
+	 * 转化为json格式的String
+	 *
+	 * @return json格式的String信息
+	 */
+	public String toJsonString() {
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		// 存放key
+		String[] key = {"orderNo", "orderOilStation", "orderOilType", "orderOilMass",
+				"orderOilPrice", "orderOilTotal", "orderStartTime"};
+		// 存放value
+		Object[] value = {orderNo, orderOilStation, orderOilType, orderOilMass,
+				orderOilPrice, orderOilTotal, orderStartTime};
+		for (int i = 0; i < key.length; i++) {
+			try {
+				jsonObject.put(key[i], value[i]);
+			} catch (JSONException e) {
+			}
+		}
+		jsonArray.put(jsonObject);
+		return jsonArray.toString();
 	}
 
 }

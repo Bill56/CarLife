@@ -5,10 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -18,6 +22,7 @@ import com.bill56.entity.OrderRefuOil;
 import com.bill56.listener.HttpCallbackListener;
 import com.bill56.util.HttpUtil;
 import com.bill56.util.JSONUtil;
+import com.bill56.util.QRCodeUtil;
 import com.bill56.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -73,6 +78,40 @@ public class HistListActivity extends BaseActivity {
         listView_his = (ListView) findViewById(R.id.listView_his);
         // 列表数据初始化
         updateOrderOil();
+        // 设置对ListView的点击事件监听
+        listView_his.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 根据数据信息，生成二维码
+                // 获得数据
+                String orderNo = (String) data.get(position).get("orderId");
+                String orderOilStation = (String) data.get(position).get("stname");
+                float orderOilTotal = (float) data.get(position).get("lmoney");
+                float orderOilPrice = (float) data.get(position).get("lprice");
+                int orderOilMass = (int) data.get(position).get("lmass");
+                String orderOilType = (String) data.get(position).get("ltype");
+                String orderStartTime = (String) data.get(position).get("ostart");
+                OrderRefuOil order = new OrderRefuOil();
+                // 将数据封装
+                order.setOrderNo(orderNo);
+                order.setOrderOilStation(orderOilStation);
+                order.setOrderOilTotal(orderOilTotal);
+                order.setOrderOilPrice(orderOilPrice);
+                order.setOrderOilMass(orderOilMass);
+                order.setOrderOilType(orderOilType);
+                order.setOrderStartTime(orderStartTime);
+                // 弹出二维码对话框
+                AlertDialog.Builder builder = new AlertDialog.Builder(HistListActivity.this);
+                View v = getLayoutInflater().inflate(R.layout.dialog_qrimg, null);
+                ImageView imgQR = (ImageView) v.findViewById(R.id.imageView_qrcode);
+                builder.setTitle(orderNo)
+                .setView(v)
+                .setPositiveButton(R.string.perinfo_button_ok,null);
+                QRCodeUtil.createQRImage(order.toJsonString(), imgQR);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
     /**
