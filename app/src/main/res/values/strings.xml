@@ -74,6 +74,8 @@
     <string name="notification_detail_title">详细</string>
     <string name="notification_delete">删除</string>
     <string name="notification_clear">清空通知</string>
+    <string name="activity_hist_title">历史记录</string>
+    <string name="activity_payresult_title">支付结果</string>
 
 
 </resources>

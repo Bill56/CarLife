@@ -3,11 +3,14 @@ package com.bill56.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bill56.carlife.MainActivity;
 import com.bill56.carlife.R;
+import com.bill56.util.ActivityUtil;
 
 
 public class PayResultActivity extends BaseActivity {
@@ -18,11 +21,41 @@ public class PayResultActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_result);
-
+        // 显示返回键
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.activity_payresult_title);
+        // 设置图标
         imageView_result = (ImageView) findViewById(R.id.imageView_result);
-        if (false) {
-            imageView_result.setImageResource(R.drawable.ic_gas_station);
+    }
+
+    /**
+     * 创建选项菜单
+     *
+     * @param menu 菜单
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.back, menu);
+        return true;
+    }
+
+    /**
+     * 当选项菜单被选中的时候执行
+     *
+     * @param item 被选中的菜单
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
         }
+        return true;
     }
 
     /**
@@ -41,13 +74,15 @@ public class PayResultActivity extends BaseActivity {
      * @param v
      */
     public void ToMain(View v) {
+        ActivityUtil.finishExcept(this);
         Intent intent = new Intent(PayResultActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        finish();
     }
+
 }

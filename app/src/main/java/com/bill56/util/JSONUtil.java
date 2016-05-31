@@ -549,4 +549,70 @@ public class JSONUtil {
         return createQueryUserCar(userId);
     }
 
+    /**
+     * 解析服务器发回的json数据
+     *
+     * @param jsonResponse json数据
+     * @return 大于0表示成功，否则为失败
+     */
+    public static int parseAddOrderResultJSON(String jsonResponse) {
+        int addResult = 0;
+        try {
+            // 将json字符串转成jsonArray对象
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            addResult = jsonObject.getInt("addResult");
+        } catch (JSONException e) {
+            addResult = 0;
+        }
+        return addResult;
+    }
+
+    /**
+     * 根据订单号和订单状态号生成json数据
+     *
+     * @param orderNo      订单号
+     * @param orderStateNo 订单状态号
+     * @return json数据
+     */
+    public static String createUpdateOrderStateJSON(String orderNo, int orderStateNo) {
+        String jsonInfo = new String();
+        // 创建json格式的数据对象，该对象是一个包含n个json数据对象的集合
+        try {
+            JSONArray jsonArray = new JSONArray();
+            // 创建一个json类，对应用户车辆对象
+            JSONObject jsonUpdateOrder = new JSONObject();
+            // 保存修改信息
+            jsonUpdateOrder.put("orderNo", orderNo);
+            jsonUpdateOrder.put("orderStateNo",orderStateNo);
+            // 将jsonUser放入jsonArray
+            jsonArray.put(jsonUpdateOrder);
+            // 将jsonArray编程json字符串
+            jsonInfo = jsonArray.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jsonInfo;
+    }
+
+    /**
+     * 解析服务器发回的json数据
+     *
+     * @param jsonResponse json数据
+     * @return 大于0表示成功，否则为失败
+     */
+    public static int parseUpdateOrderResultJSON(String jsonResponse) {
+        int addResult = 0;
+        try {
+            // 将json字符串转成jsonArray对象
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            addResult = jsonObject.getInt("updateResult");
+        } catch (JSONException e) {
+            addResult = 0;
+        }
+        return addResult;
+    }
+
 }

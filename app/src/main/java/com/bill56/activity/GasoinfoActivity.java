@@ -2,14 +2,19 @@ package com.bill56.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewDebug;
 import android.widget.EditText;
@@ -19,15 +24,17 @@ import android.widget.TextView;
 
 
 import com.bill56.carlife.R;
+import com.bill56.listener.HttpCallbackListener;
+import com.bill56.util.HttpUtil;
+import com.bill56.util.JSONUtil;
+import com.bill56.util.ToastUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.zip.Inflater;
 
 public class GasoinfoActivity extends BaseActivity {
 
@@ -50,6 +57,7 @@ public class GasoinfoActivity extends BaseActivity {
     private String gas_0;
     private float prices;
     private String name;
+    private String orderNo;
 
     //对话框信息
     private int paycount;
@@ -64,13 +72,16 @@ public class GasoinfoActivity extends BaseActivity {
     private TextView textView_mass;
     private TextView textView_type;
     private TextView textView_prices;
+    // 显示进度对话框
+    private ProgressDialog progDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gasoinfo);
-
+        // 显示返回键
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //绑定
         textView_gstation = (TextView) findViewById(R.id.textView_gstation);
         textView_bname = (TextView) findViewById(R.id.textView_bname);
@@ -81,14 +92,30 @@ public class GasoinfoActivity extends BaseActivity {
         radioButton_2 = (RadioButton) findViewById(R.id.radioButton2);
         radioButton_3 = (RadioButton) findViewById(R.id.radioButton3);
         radioButton_4 = (RadioButton) findViewById(R.id.radioButton4);
-
         try {
             init();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         addListener();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.back,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     private void initDialog() {
@@ -109,10 +136,26 @@ public class GasoinfoActivity extends BaseActivity {
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(GasoinfoActivity.this, PayResultActivity.class);
-                //是否预订成功
-//                intent.putExtra("result", result);
-                startActivity(intent);
+                showProgressDialog("正在支付......");
+                // 访问网络修改订单状态
+                HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_UPDATE_ORDER_STATE,
+                        JSONUtil.createUpdateOrderStateJSON(orderNo, 2), new HttpCallbackListener() {
+                            Message message = new Message();
+
+                            @Override
+                            public void onFinish(String response) {
+                                message.what = UPDATE_SUCCESS;
+                                message.obj = response;
+                                addHandler.sendMessage(message);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                message.what = ADD_FAILURE;
+                                message.obj = "服务器异常";
+                                addHandler.sendMessage(message);
+                            }
+                        });
             }
         });
         builder.setNegativeButton("取消", null);
@@ -239,6 +282,7 @@ public class GasoinfoActivity extends BaseActivity {
     }
 
     public void Submit(View v) throws JSONException {
+        showProgressDialog("正在下单，请稍等......");
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -247,7 +291,7 @@ public class GasoinfoActivity extends BaseActivity {
 
             long stamp = System.currentTimeMillis();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-            String orderNo = sdf.format(new Date(stamp));
+            orderNo = sdf.format(new Date(stamp));
             Log.d("Gasoinfo", orderNo);
 
             String orderOilstation = name;
@@ -296,8 +340,25 @@ public class GasoinfoActivity extends BaseActivity {
             array.put(object);
             String json = array.toString();
             Log.d("Gasoinfo", json);
+            // 发送数据给服务器
+            HttpUtil.sendHttpRequestToInner(HttpUtil.REQUEST_ADD_ORDER,
+                    json, new HttpCallbackListener() {
+                        Message message = new Message();
 
-            initDialog();
+                        @Override
+                        public void onFinish(String response) {
+                            message.what = ADD_SUCCESS;
+                            message.obj = response;
+                            addHandler.sendMessage(message);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            message.what = ADD_FAILURE;
+                            message.obj = "服务器异常";
+                            addHandler.sendMessage(message);
+                        }
+                    });
         }
     }
 
@@ -306,4 +367,97 @@ public class GasoinfoActivity extends BaseActivity {
         super.onDestroy();
         finish();
     }
+
+    /**
+     * 显示进度框
+     */
+    private void showProgressDialog(String msg) {
+        if (progDialog == null)
+            progDialog = new ProgressDialog(this);
+        progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDialog.setIndeterminate(false);
+        progDialog.setCancelable(false);
+        progDialog.setMessage(msg);
+        progDialog.show();
+    }
+
+    /**
+     * 隐藏进度框
+     */
+    private void dissmissProgressDialog() {
+        if (progDialog != null) {
+            progDialog.dismiss();
+        }
+    }
+
+
+    // 服务器响应类型标志
+    private final int ADD_SUCCESS = 5001;
+    private final int ADD_FAILURE = 5002;
+    private final int UPDATE_SUCCESS = 5003;
+
+    private Handler addHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case ADD_SUCCESS:
+                    String response = (String) msg.obj;
+                    doAddResponseSuccess(response);
+                    break;
+                case UPDATE_SUCCESS:
+                    String updateResponse = (String) msg.obj;
+                    doUpdateResponseSuccess(updateResponse);
+                    break;
+                case ADD_FAILURE:
+                    String failureText = (String) msg.obj;
+                    ToastUtil.show(GasoinfoActivity.this, failureText);
+                    dissmissProgressDialog();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+
+    /**
+     * 解析服务器响应成功后的数据
+     *
+     * @param response 服务器响应数据
+     */
+    private void doAddResponseSuccess(String response) {
+        int addResult = JSONUtil.parseAddOrderResultJSON(response);
+        // 网络请求完成，关闭对话框
+        dissmissProgressDialog();
+        // 表示下单成功
+        if (addResult > 0) {
+            // 弹出支付对话框
+            initDialog();
+        } else {
+            ToastUtil.show(this,"网络繁忙，请再试一次");
+        }
+    }
+
+    /**
+     * 解析服务器响应修改成功后的数据
+      * @param response   服务器响应的数据
+     */
+    private void doUpdateResponseSuccess(String response) {
+        int updateResult = JSONUtil.parseUpdateOrderResultJSON(response);
+        // 网络请求完成，关闭对话框
+        dissmissProgressDialog();
+        // 表示支付成功
+        if (updateResult > 0) {
+            // 跳到支付成功页面
+            Intent intent = new Intent(GasoinfoActivity.this, PayResultActivity.class);
+            //是否预订成功
+//                intent.putExtra("result", result);
+            startActivity(intent);
+        } else {
+            ToastUtil.show(this,"网络繁忙，支付失败");
+        }
+    }
+
+
 }

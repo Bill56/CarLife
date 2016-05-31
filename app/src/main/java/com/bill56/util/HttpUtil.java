@@ -60,6 +60,12 @@ public class HttpUtil {
 
     public static final int REQUEST_CLEAR_NOTIFICATION = 404;
 
+    public static final int REQUEST_ADD_ORDER = 501;
+
+    public static final int REQUEST_UPDATE_ORDER_STATE = 502;
+
+    public static final int REQUEST_QUERY_ALL_ORDERS = 503;
+
 
     /**
      * 发送请求给指定网址并获得数据（访问内部）
@@ -284,6 +290,10 @@ public class HttpUtil {
                 return "deleteNotification";
             case REQUEST_CLEAR_NOTIFICATION:
                 return "clearNotification";
+            case REQUEST_ADD_ORDER:
+                return "addOrderRefuOil";
+            case REQUEST_UPDATE_ORDER_STATE:
+                return "updateOrderState";
             default:
                 return "error";
         }

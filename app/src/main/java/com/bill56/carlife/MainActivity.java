@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements LocationSource,
         // 初始化抽屉布局
         initDrawLayout();
         //        判断蓝牙是否连接
-        BluetoothConn(1);
+        // BluetoothConn(1);
         init();
     }
 
@@ -548,6 +548,15 @@ public class MainActivity extends BaseActivity implements LocationSource,
             notifiIntent.putExtra("userId", userId);
             startActivity(notifiIntent);
         }
+    }
+
+    /**
+     * 当用户点击历史记录后执行
+     *
+     * @param v 事件源
+     */
+    public void HistoryOrder(View v) {
+
     }
 
     @Override
