@@ -2,6 +2,7 @@ package com.bill56.util;
 
 
 import com.bill56.entity.CarNotification;
+import com.bill56.entity.OrderRefuOil;
 import com.bill56.entity.User;
 import com.bill56.entity.UserCar;
 
@@ -613,6 +614,46 @@ public class JSONUtil {
             addResult = 0;
         }
         return addResult;
+    }
+
+    public static String createQueryOrderJSON(int userId) {
+        return createQueryUserCar(userId);
+    }
+
+    public static List<OrderRefuOil> parseQueryOrderJSON(String jsonResponse) {
+        ArrayList<OrderRefuOil> orders = new ArrayList<>();
+        try {
+            // 将json字符串转成jsonArray对象
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            // 循环获取json中的对象
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (i == 0) {
+                    // 获取第一个对象中的queryResult，若为正数说明查询成功
+                    int queryResult = jsonObject.getInt("queryResult");
+                    if (queryResult <= 0) {
+                        // 查询不成功，直接返回null
+                        return null;
+                    }
+                }
+                // 获取其他的数据
+                OrderRefuOil orderRefuOil = new OrderRefuOil();
+                orderRefuOil.setOrderNo(jsonObject.getString("orderNo"));
+                orderRefuOil.setOrderOilStation(jsonObject.getString("orderOilStation"));
+                orderRefuOil.setOrderOilPrice((float) jsonObject.getDouble("orderOilPrice"));
+                orderRefuOil.setOrderOilTotal((float) jsonObject.getDouble("orderOilTotal"));
+                orderRefuOil.setOrderOilMass(jsonObject.getInt("orderOilMass"));
+                orderRefuOil.setOrderStartTime(jsonObject.getString("orderStartTime"));
+                orderRefuOil.setOrderOilType(jsonObject.getString("orderOilType"));
+                orderRefuOil.setOrderStateName(jsonObject.getString("orderStateName"));
+                // 添加到列表
+                orders.add(orderRefuOil);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            orders = null;
+        }
+        return orders;
     }
 
 }

@@ -39,6 +39,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bill56.activity.BaseActivity;
+import com.bill56.activity.HistListActivity;
 import com.bill56.activity.LoadActivity;
 import com.bill56.activity.NotificationActivity;
 import com.bill56.activity.OrdRefActivity;
@@ -556,7 +557,30 @@ public class MainActivity extends BaseActivity implements LocationSource,
      * @param v 事件源
      */
     public void HistoryOrder(View v) {
-
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = preferences.getString("name", null);
+        int userId = preferences.getInt("id", 0);
+        if (name == null || userId <= 0) {
+            // 弹出对话框，让其登录
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("提示");
+            builder.setMessage("您还未登录，请登录后查询");
+            builder.setCancelable(false);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    startActivity(new Intent(MainActivity.this, LoadActivity.class));
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // 进入历史记录
+            Intent histIntent = new Intent(this, HistListActivity.class);
+            histIntent.putExtra("userId",userId);
+            startActivity(histIntent);
+        }
     }
 
     @Override

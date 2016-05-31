@@ -65,6 +65,7 @@ public class PayResultActivity extends BaseActivity {
      */
     public void ToList(View v) {
         Intent intent = new Intent(PayResultActivity.this, HistListActivity.class);
+        intent.putExtra("userId",getIntent().getIntExtra("userId",0));
         startActivity(intent);
     }
 

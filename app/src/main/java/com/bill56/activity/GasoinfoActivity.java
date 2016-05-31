@@ -74,6 +74,8 @@ public class GasoinfoActivity extends BaseActivity {
     private TextView textView_prices;
     // 显示进度对话框
     private ProgressDialog progDialog;
+    // 用户id
+    private int userId;
 
 
     @Override
@@ -286,8 +288,8 @@ public class GasoinfoActivity extends BaseActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        int useId = preferences.getInt("id", 0);
-        if (useId > 0) {
+            userId  = preferences.getInt("id", 0);
+        if (userId > 0) {
 
             long stamp = System.currentTimeMillis();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -329,7 +331,7 @@ public class GasoinfoActivity extends BaseActivity {
             // To JSON
             JSONArray array = new JSONArray();
             JSONObject object = new JSONObject();
-            object.put("useId", useId);
+            object.put("useId", userId);
             object.put("orderNo", orderNo);
             object.put("orderOilstation", orderOilstation);
             object.put("orderOilType", orderOilType);
@@ -451,8 +453,8 @@ public class GasoinfoActivity extends BaseActivity {
         if (updateResult > 0) {
             // 跳到支付成功页面
             Intent intent = new Intent(GasoinfoActivity.this, PayResultActivity.class);
-            //是否预订成功
-//                intent.putExtra("result", result);
+            //是否预订成功，传入用户id
+            intent.putExtra("userId",userId);
             startActivity(intent);
         } else {
             ToastUtil.show(this,"网络繁忙，支付失败");

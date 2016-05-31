@@ -294,6 +294,8 @@ public class HttpUtil {
                 return "addOrderRefuOil";
             case REQUEST_UPDATE_ORDER_STATE:
                 return "updateOrderState";
+            case REQUEST_QUERY_ALL_ORDERS:
+                return "queryAllOrder";
             default:
                 return "error";
         }
