@@ -146,7 +146,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:onClick="Help">
 
         <ImageView
             android:id="@+id/imageView_6"
@@ -172,7 +173,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:onClick="Setting">
 
         <ImageView
             android:id="@+id/imageView_7"

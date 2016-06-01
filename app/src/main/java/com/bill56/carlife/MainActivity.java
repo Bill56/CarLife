@@ -38,13 +38,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bill56.activity.AboutActivity;
 import com.bill56.activity.BaseActivity;
+import com.bill56.activity.HelpActivity;
 import com.bill56.activity.HistListActivity;
 import com.bill56.activity.LoadActivity;
 import com.bill56.activity.NotificationActivity;
 import com.bill56.activity.OrdRefActivity;
 import com.bill56.activity.PerInfoActivity;
 import com.bill56.activity.SeekActivity;
+import com.bill56.activity.SettingAcitivity;
 import com.bill56.activity.WeiZhangQueryActivity;
 import com.bill56.service.QueryCarStateService;
 import com.bill56.util.ActivityUtil;
@@ -423,34 +426,54 @@ public class MainActivity extends BaseActivity implements LocationSource,
      * @param v 被点击的事件源
      */
     public void OrderRefuel(View v) {
-        //http://apis.juhe.cn/oil/local?key=您申请的APPKEY&lon=116.403119&lat=39.916042&format=2&r=3000
-        showProgressDialog();
-        String httpkey = "key=88cb2204cb62d2cb709c275ce1b4cb98";
-        String lon = "&lon=" + longitude;
-        String lat = "&lat=" + latitude;
-        String r = "&r=5000";
-        String httpUrl = "http://apis.juhe.cn/oil/local?" + httpkey + lon + lat + r;
-
-        //抽屉关闭
-        drawerLayout.closeDrawer(GravityCompat.START);
-        Net.getInstance(getApplicationContext()).addRequestToQueue(new StringRequest(Request.Method.GET, httpUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //获取json对象
-                LogUtil.d("MainActivity", response);
-                //跳转到数据显示界面
-                Intent intent = new Intent(MainActivity.this, OrdRefActivity.class);
-                intent.putExtra("response", response);
-                startActivity(intent);
-                dissmissProgressDialog();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "101", Toast.LENGTH_SHORT).show();
-                dissmissProgressDialog();
-            }
-        }));
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = preferences.getString("name", null);
+        int userId = preferences.getInt("id", 0);
+        if (name == null || userId <= 0) {
+            // 弹出对话框，让其登录
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("提示");
+            builder.setMessage("您还未登录，请登录后查询");
+            builder.setCancelable(false);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    startActivity(new Intent(MainActivity.this, LoadActivity.class));
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // 已经登录的用户
+            //http://apis.juhe.cn/oil/local?key=您申请的APPKEY&lon=116.403119&lat=39.916042&format=2&r=3000
+            showProgressDialog();
+            String httpkey = "key=88cb2204cb62d2cb709c275ce1b4cb98";
+            String lon = "&lon=" + longitude;
+            String lat = "&lat=" + latitude;
+            String r = "&r=5000";
+            String httpUrl = "http://apis.juhe.cn/oil/local?" + httpkey + lon + lat + r;
+            //抽屉关闭
+            drawerLayout.closeDrawer(GravityCompat.START);
+            Net.getInstance(getApplicationContext()).addRequestToQueue(new StringRequest(Request.Method.GET, httpUrl, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    //获取json对象
+                    LogUtil.d("MainActivity", response);
+                    //跳转到数据显示界面
+                    Intent intent = new Intent(MainActivity.this, OrdRefActivity.class);
+                    intent.putExtra("response", response);
+                    startActivity(intent);
+                    dissmissProgressDialog();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(MainActivity.this, "101", Toast.LENGTH_SHORT).show();
+                    dissmissProgressDialog();
+                }
+            }));
+        }
     }
 
     // 显示加载的对话框
@@ -583,9 +606,36 @@ public class MainActivity extends BaseActivity implements LocationSource,
         } else {
             // 进入历史记录
             Intent histIntent = new Intent(this, HistListActivity.class);
-            histIntent.putExtra("userId",userId);
+            histIntent.putExtra("userId", userId);
             startActivity(histIntent);
         }
+    }
+
+    /**
+     * 当用户点击帮助的时候执行的代码
+     *
+     * @param v 事件源
+     */
+    public void Help(View v) {
+        startActivity(new Intent(this, HelpActivity.class));
+    }
+
+    /**
+     * 当用户点击设置的时候执行的代码
+     *
+     * @param v 事件源
+     */
+    public void Setting(View v) {
+        startActivity(new Intent(this, SettingAcitivity.class));
+    }
+
+    /**
+     * 当用户点击关于的时候执行的代码
+     *
+     * @param v 事件源
+     */
+    public void About(View v) {
+        startActivity(new Intent(this, AboutActivity.class));
     }
 
     @Override

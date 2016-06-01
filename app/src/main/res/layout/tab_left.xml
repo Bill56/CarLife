@@ -23,6 +23,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:onClick="About"
             android:id="@+id/text_about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

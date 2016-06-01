@@ -114,6 +114,15 @@
 
         </activity>
 
+        <activity android:name="com.bill56.activity.HelpActivity">
+
+        </activity>
+        <activity android:name="com.bill56.activity.AboutActivity">
+
+        </activity>
+        <activity android:name="com.bill56.activity.SettingAcitivity">
+
+        </activity>
         <service android:name="com.bill56.service.QueryCarStateService">
 
         </service>
