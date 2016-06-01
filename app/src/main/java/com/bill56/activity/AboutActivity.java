@@ -1,9 +1,12 @@
 package com.bill56.activity;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bill56.adapter.AboutAdapter;
 import com.bill56.carlife.R;
@@ -19,6 +22,8 @@ import java.util.List;
 public class AboutActivity extends BaseActivity {
     private List<About> aboutList = new ArrayList<About>();
 
+    private TextView textViewAbout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,23 @@ public class AboutActivity extends BaseActivity {
         AboutAdapter adapter = new AboutAdapter(AboutActivity.this, R.layout.about_item, aboutList);
         ListView listView = (ListView) findViewById(R.id.about_list_view);
         listView.setAdapter(adapter);
+        textViewAbout = (TextView) findViewById(R.id.textView_about);
+        initVersion();
+    }
+
+    /**
+     * 获取app的版本号
+     */
+    private void initVersion() {
+        PackageManager manager = getPackageManager();
+        try {
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(),0);
+            textViewAbout.setText("V " + info.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            textViewAbout.setText("V 1.3.3.2755");
+        }
+
     }
 
     @Override

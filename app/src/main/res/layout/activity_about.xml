@@ -7,15 +7,16 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_car_logo" />
 
     <TextView
-        android:id="@+id/textView"
+        android:layout_marginTop="8dp"
+        android:id="@+id/textView_about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
@@ -26,7 +27,7 @@
         android:id="@+id/about_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/textView_about"
         android:layout_marginBottom="50dip"
         android:layout_marginTop="90dp"
         tools:listitem="@android:layout/simple_list_item_1" />
